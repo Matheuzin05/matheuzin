@@ -11,16 +11,16 @@ def login():
     username = request.form['username']
     password = request.form['password']
    
-    if username == 'gabriel@' and password == '123':
+    if username == '' and password == '123':
         return redirect('/servicos')
     else:
         print('Usuário não encontrado')
         return "Usuário ou senha incorretos", 401
 
 
-@app.route('/pagina2')
-def pagina2():
-    return render_template('pagina2.html')
+@app.route('/login')
+def cadastro():
+    return render_template('login.html')
 
 @app.route('/servicos')
 def servicos():

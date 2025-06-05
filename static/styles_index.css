@@ -59,14 +59,14 @@ body {
     user-select: none;
   }
   
-  .btn-cadastro-container,
+  
   .btn-login-container {
     display: flex;
     justify-content: center;
     margin-bottom: 40px;
   }
   
-  .btn-cadastro,
+  
   .btn-login {
     background: #1d4ed8;
     color: #fff;
@@ -80,10 +80,9 @@ body {
     cursor: pointer;
     transition: background 0.3s ease, box-shadow 0.3s ease;
     user-select: none;
-    margin: 0 5px; /* Adiciona espaçamento entre os botões */
   }
   
-  .btn-cadastro:hover,
+  
   .btn-login:hover {
     background: #2563eb;
     box-shadow: 0 9px 22px rgba(37, 99, 235, 0.9);
