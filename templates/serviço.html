@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Estilos de Jogos Conhecidos</title>
+<link rel="stylesheet" href="{{ url_for ('static', filename='styles_serviço.css')}}" />
+</head>
+<body>
+<header aria-label="Cabeçalho principal">
+  <div class="container" style="display:flex; justify-content: space-between; align-items: center;">
+    <div class="logo" tabindex="0">GameStyles</div>
+    <button class="login-button" type="button" aria-label="Login">Login</button>
+  </div>
+</header>
+<main class="container">
+  <h1>Estilos de Jogos Conhecidos</h1>
+  <div class="search-wrapper">
+    <input type="text" id="searchInput" aria-label="Campo de pesquisa de jogos" placeholder="Pesquisar jogos..." />
+  </div>
+  <nav class="category-selector" role="list" aria-label="Seleção de categoria de jogos">
+    <!-- Category buttons go here -->
+  </nav>
+  <section class="games-grid" id="gamesGrid" aria-label="Lista de estilos de jogos">
+    <!-- Game cards will be inserted here -->
+  </section>
+</main>
+
+<script>
+  // Data for example games: 7 categories, 3 games each = 21 games total
+  const categories = [
+    { id: 'party_social', label: 'Party / Social Deduction' },
+    { id: 'sandbox_survival', label: 'Sandbox / Survival' },
+    { id: 'fps_shooter', label: 'FPS / Shooter' },
+    { id: 'rpg_fantasy', label: 'RPG / Fantasy' },
+    { id: 'strategy_simulation', label: 'Strategy / Simulation' },
+    { id: 'sensacao', label: 'Sensação' },
+    { id: 'acesso_antecipado', label: 'Acesso Antecipado' }
+  ];
+
+  const games = [
+    // Party / Social Deduction
+    {
+      id: 1,
+      category: 'party_social',
+      name: "Among Us",
+      style: "Party / Social Deduction",
+      comments: [
+        "Muito divertido para jogar com amigos!",
+        "Adoro as estratégias envolvidas."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 10.99 },
+        { month: "Out/2023", price: 12.49 },
+        { month: "Set/2023", price: 11.99 },
+        { month: "Ago/2023", price: 13.49 },
+        { month: "Jul/2023", price: 14.99 },
+        { month: "Jun/2023", price: 15.99 }
+      ],
+      rating: 4
+    },
+    {
+      id: 2,
+      category: 'party_social',
+      name: "Fall Guys",
+      style: "Party / Social Deduction",
+      comments: [
+        "Jogo cheio de diversão e caos!",
+        "Ótimo para jogar casualmente."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 19.99 },
+        { month: "Out/2023", price: 23.49 },
+        { month: "Set/2023", price: 22.99 },
+        { month: "Ago/2023", price: 18.99 },
+        { month: "Jul/2023", price: 25.99 },
+        { month: "Jun/2023", price: 29.99 }
+      ],
+      rating: 3
+    },
+    {
+      id: 3,
+      category: 'party_social',
+      name: "Jackbox Party Pack",
+      style: "Party / Social Deduction",
+      comments: [
+        "Ideal para festas com amigos.",
+        "Jogo super criativo e engraçado."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 30.99 },
+        { month: "Out/2023", price: 34.49 },
+        { month: "Set/2023", price: 35.99 },
+        { month: "Ago/2023", price: 33.49 },
+        { month: "Jul/2023", price: 32.99 },
+        { month: "Jun/2023", price: 31.99 }
+      ],
+      rating: 4
+    },
+
+    // Sandbox / Survival
+    {
+      id: 4,
+      category: 'sandbox_survival',
+      name: "Minecraft",
+      style: "Sandbox / Survival",
+      comments: [
+        "Criatividade sem limites!",
+        "Melhor jogo para explorar o mundo."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 26.49 },
+        { month: "Out/2023", price: 27.99 },
+        { month: "Set/2023", price: 25.99 },
+        { month: "Ago/2023", price: 24.99 },
+        { month: "Jul/2023", price: 24.49 },
+        { month: "Jun/2023", price: 23.99 }
+      ],
+      rating: 5
+    },
+    {
+      id: 5,
+      category: 'sandbox_survival',
+      name: "Terraria",
+      style: "Sandbox / Survival",
+      comments: [
+        "Jogo com muita exploração e combate.",
+        "Perfeito para quem curte pixel art."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 11.99 },
+        { month: "Out/2023", price: 12.99 },
+        { month: "Set/2023", price: 11.49 },
+        { month: "Ago/2023", price: 10.99 },
+        { month: "Jul/2023", price: 10.49 },
+        { month: "Jun/2023", price: 9.99 }
+      ],
+      rating: 4
+    },
+    {
+      id: 6,
+      category: 'sandbox_survival',
+      name: "Subnautica",
+      style: "Sandbox / Survival",
+      comments: [
+        "Exploração submarina fantástica.",
+        "Trilha sonora imersiva."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 29.99 },
+        { month: "Out/2023", price: 31.49 },
+        { month: "Set/2023", price: 32.99 },
+        { month: "Ago/2023", price: 30.49 },
+        { month: "Jul/2023", price: 28.99 },
+        { month: "Jun/2023", price: 27.99 }
+      ],
+      rating: 4
+    },
+
+    // FPS / Shooter
+    {
+      id: 7,
+      category: 'fps_shooter',
+      name: "Call of Duty",
+      style: "FPS / Shooter",
+      comments: [
+        "Gráficos incríveis!",
+        "Campanha emocionante."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 59.99 },
+        { month: "Out/2023", price: 62.49 },
+        { month: "Set/2023", price: 60.99 },
+        { month: "Ago/2023", price: 58.99 },
+        { month: "Jul/2023", price: 57.49 },
+        { month: "Jun/2023", price: 55.99 }
+      ],
+      rating: 3
+    },
+    {
+      id: 8,
+      category: 'fps_shooter',
+      name: "Overwatch",
+      style: "FPS / Shooter",
+      comments: [
+        "Jogo rápido e divertido.",
+        "Personagens carismáticos."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 39.99 },
+        { month: "Out/2023", price: 42.49 },
+        { month: "Set/2023", price: 38.99 },
+        { month: "Ago/2023", price: 35.49 },
+        { month: "Jul/2023", price: 34.99 },
+        { month: "Jun/2023", price: 33.99 }
+      ],
+      rating: 4
+    },
+    {
+      id: 9,
+      category: 'fps_shooter',
+      name: "Valorant",
+      style: "FPS / Shooter",
+      comments: [
+        "Ótima jogabilidade tática.",
+        "Comunidade ativa."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 0.00 },
+        { month: "Out/2023", price: 0.00 },
+        { month: "Set/2023", price: 0.00 },
+        { month: "Ago/2023", price: 0.00 },
+        { month: "Jul/2023", price: 0.00 },
+        { month: "Jun/2023", price: 0.00 }
+      ],
+      rating: 4
+    },
+
+    // RPG / Fantasy
+    {
+      id: 10,
+      category: 'rpg_fantasy',
+      name: "The Witcher 3",
+      style: "RPG / Fantasy",
+      comments: [
+        "História envolvente e madura.",
+        "Mundo aberto fantástico."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 49.99 },
+        { month: "Out/2023", price: 52.99 },
+        { month: "Set/2023", price: 50.49 },
+        { month: "Ago/2023", price: 47.99 },
+        { month: "Jul/2023", price: 45.49 },
+        { month: "Jun/2023", price: 44.99 }
+      ],
+      rating: 5
+    },
+    {
+      id: 11,
+      category: 'rpg_fantasy',
+      name: "Skyrim",
+      style: "RPG / Fantasy",
+      comments: [
+        "Exploração infinita.",
+        "Mods incríveis disponíveis."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 39.99 },
+        { month: "Out/2023", price: 37.49 },
+        { month: "Set/2023", price: 35.99 },
+        { month: "Ago/2023", price: 33.49 },
+        { month: "Jul/2023", price: 34.99 },
+        { month: "Jun/2023", price: 36.99 }
+      ],
+      rating: 4
+    },
+    {
+      id: 12,
+      category: 'rpg_fantasy',
+      name: "Dark Souls 3",
+      style: "RPG / Fantasy",
+      comments: [
+        "Desafio intenso e gratificante.",
+        "Atmosfera incrível."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 29.99 },
+        { month: "Out/2023", price: 27.49 },
+        { month: "Set/2023", price: 28.99 },
+        { month: "Ago/2023", price: 30.49 },
+        { month: "Jul/2023", price: 31.99 },
+        { month: "Jun/2023", price: 33.99 }
+      ],
+      rating: 4
+    },
+
+    // Strategy / Simulation
+    {
+      id: 13,
+      category: 'strategy_simulation',
+      name: "Civilization VI",
+      style: "Strategy / Simulation",
+      comments: [
+        "Muito estratégico e complexo.",
+        "Rejogabilidade altíssima."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 49.99 },
+        { month: "Out/2023", price: 52.49 },
+        { month: "Set/2023", price: 51.99 },
+        { month: "Ago/2023", price: 50.49 },
+        { month: "Jul/2023", price: 48.99 },
+        { month: "Jun/2023", price: 47.49 }
+      ],
+      rating: 4
+    },
+    {
+      id: 14,
+      category: 'strategy_simulation',
+      name: "The Sims 4",
+      style: "Strategy / Simulation",
+      comments: [
+        "Muito divertido criar histórias.",
+        "Grande comunidade modding."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 39.99 },
+        { month: "Out/2023", price: 41.49 },
+        { month: "Set/2023", price: 40.99 },
+        { month: "Ago/2023", price: 38.49 },
+        { month: "Jul/2023", price: 37.99 },
+        { month: "Jun/2023", price: 36.49 }
+      ],
+      rating: 3
+    },
+    {
+      id: 15,
+      category: 'strategy_simulation',
+      name: "Factorio",
+      style: "Strategy / Simulation",
+      comments: [
+        "Automação incrível!",
+        "Vício garantido."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 30.99 },
+        { month: "Out/2023", price: 32.49 },
+        { month: "Set/2023", price: 31.99 },
+        { month: "Ago/2023", price: 29.49 },
+        { month: "Jul/2023", price: 28.99 },
+        { month: "Jun/2023", price: 27.99 }
+      ],
+      rating: 5
+    },
+
+    // Sensação (recent successful releases)
+    {
+      id: 16,
+      category: 'sensacao',
+      name: "Elden Ring",
+      style: "RPG / Adventure",
+      comments: [
+        "Sensacional, jogaço!",
+        "Desafio incrível e mundo aberto vasto."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 189.99 },
+        { month: "Out/2023", price: 199.99 },
+        { month: "Set/2023", price: 209.99 },
+        { month: "Ago/2023", price: 220.00 },
+        { month: "Jul/2023", price: 229.99 },
+        { month: "Jun/2023", price: 239.99 }
+      ],
+      rating: 5
+    },
+    {
+      id: 17,
+      category: 'sensacao',
+      name: "Hades",
+      style: "Rogue-like / Action",
+      comments: [
+        "Muito estilo, viciante!",
+        "Jogabilidade fluida e arte linda."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 49.99 },
+        { month: "Out/2023", price: 52.00 },
+        { month: "Set/2023", price: 55.49 },
+        { month: "Ago/2023", price: 54.99 },
+        { month: "Jul/2023", price: 50.00 },
+        { month: "Jun/2023", price: 49.99 }
+      ],
+      rating: 5
+    },
+    {
+      id: 18,
+      category: 'sensacao',
+      name: "Resident Evil Village",
+      style: "Horror / Survival",
+      comments: [
+        "Assustador e envolvente.",
+        "Melhor jogo da série."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 109.99 },
+        { month: "Out/2023", price: 115.49 },
+        { month: "Set/2023", price: 120.00 },
+        { month: "Ago/2023", price: 125.99 },
+        { month: "Jul/2023", price: 130.00 },
+        { month: "Jun/2023", price: 135.50 }
+      ],
+      rating: 4
+    },
+
+    // Acesso Antecipado (pre-sale games)
+    {
+      id: 19,
+      category: 'acesso_antecipado',
+      name: "Starfield",
+      style: "RPG / Space",
+      comments: [
+        "Muito aguardado! Ansioso demais.",
+        "Parece promissor!"
+      ],
+      prices: [
+        { month: "Nov/2023", price: 249.99 },
+        { month: "Out/2023", price: 249.99 },
+        { month: "Set/2023", price: 249.99 },
+        { month: "Ago/2023", price: 249.99 },
+        { month: "Jul/2023", price: 249.99 },
+        { month: "Jun/2023", price: 249.99 }
+      ],
+      rating: 0
+    },
+    {
+      id: 20,
+      category: 'acesso_antecipado',
+      name: "Hogwarts Legacy",
+      style: "Action RPG / Fantasy",
+      comments: [
+        "Magia em pré-venda!",
+        "Espero que seja ótimo."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 199.99 },
+        { month: "Out/2023", price: 199.99 },
+        { month: "Set/2023", price: 199.99 },
+        { month: "Ago/2023", price: 199.99 },
+        { month: "Jul/2023", price: 199.99 },
+        { month: "Jun/2023", price: 199.99 }
+      ],
+      rating: 0
+    },
+    {
+      id: 21,
+      category: 'acesso_antecipado',
+      name: "The Last Night",
+      style: "Cyberpunk / Indie",
+      comments: [
+        "Estilo retrô e visual incrível!",
+        "Esperando ansiosamente pelo lançamento."
+      ],
+      prices: [
+        { month: "Nov/2023", price: 59.99 },
+        { month: "Out/2023", price: 59.99 },
+        { month: "Set/2023", price: 59.99 },
+        { month: "Ago/2023", price: 59.99 },
+        { month: "Jul/2023", price: 59.99 },
+        { month: "Jun/2023", price: 59.99 }
+      ],
+      rating: 0
+    }
+  ];
+
+  // Create rating stars summary (readonly)
+  function createRatingSummary(rating) {
+    const container = document.createElement('div');
+    container.className = 'rating-summary';
+    for(let i=1; i<=5; i++) {
+      const star = document.createElement('span');
+      star.className = 'star';
+      if(i <= rating) star.classList.add('filled');
+      star.textContent = '★';
+      container.appendChild(star);
+    }
+    return container;
+  }
+
+  // Render category buttons
+  function renderCategories(selectedCategoryId) {
+    const nav = document.querySelector('.category-selector');
+    nav.innerHTML = '';
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'category-button';
+      btn.type = 'button';
+      btn.textContent = cat.label;
+      btn.setAttribute('aria-pressed', cat.id === selectedCategoryId ? 'true' : 'false');
+      btn.addEventListener('click', () => {
+        currentCategory = cat.id;
+        renderCategories(currentCategory);
+        renderGamesFiltered();
+      });
+      nav.appendChild(btn);
+    });
+  }
+
+  // Render games of selected category filtered by search input
+  function renderGamesFiltered() {
+    const grid = document.getElementById('gamesGrid');
+    grid.innerHTML = '';
+    const query = searchInput.value.trim().toLowerCase();
+    const filteredGames = games.filter(g => g.category === currentCategory &&
+      g.name.toLowerCase().includes(query));
+    filteredGames.forEach(renderGameCard);
+  }
+
+  // Render a single game card with tabs and rating summary
+  function renderGameCard(game) {
+    const grid = document.getElementById('gamesGrid');
+
+    const card = document.createElement('article');
+    card.className = 'game-card';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `${game.name}, estilo ${game.style}`);
+
+    // Title row with game title and rating summary
+    const titleRow = document.createElement('div');
+    titleRow.className = 'game-title-row';
+
+    const title = document.createElement('h2');
+    title.className = 'game-title';
+    title.textContent = game.name;
+
+    let ratingSummary = createRatingSummary(game.rating);
+
+    titleRow.appendChild(title);
+    titleRow.appendChild(ratingSummary);
+
+    const style = document.createElement('p');
+    style.className = 'game-style';
+    style.textContent = game.style;
+
+    // Tabs container
+    const tabs = document.createElement('div');
+    tabs.className = 'tabs';
+    tabs.setAttribute('role', 'tablist');
+
+    const tabNames = ["Comentários", "Preços", "Avaliação"];
+
+    const tabButtons = [];
+    const tabContents = [];
+
+    tabNames.forEach((tabName, i) => {
+      const tabButton = document.createElement('button');
+      tabButton.className = 'tab-button';
+      tabButton.id = `tab${game.id}-${i}`;
+      tabButton.setAttribute('role', 'tab');
+      tabButton.setAttribute('aria-controls', `tabpanel${game.id}-${i}`);
+      tabButton.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+      tabButton.textContent = tabName;
+      tabButton.type = 'button';
+
+      if(i === 0) tabButton.classList.add('active');
+
+      tabButtons.push(tabButton);
+    });
+
+    // Comments tab content
+    const commentsContent = document.createElement('section');
+    commentsContent.id = `tabpanel${game.id}-0`;
+    commentsContent.className = 'tab-content active';
+    commentsContent.setAttribute('role', 'tabpanel');
+    commentsContent.setAttribute('aria-labelledby', `tab${game.id}-0`);
+
+    // Comments list
+    const commentsList = document.createElement('ul');
+    commentsList.className = 'comments-list';
+    commentsList.setAttribute('aria-live', 'polite');
+    game.comments.forEach(commentText => {
+      const li = document.createElement('li');
+      li.textContent = commentText;
+      commentsList.appendChild(li);
+    });
+
+    // Comment form
+    const commentForm = document.createElement('form');
+    commentForm.className = 'comment-form';
+    commentForm.action = 'javascript:void(0);';
+    commentForm.ariaLabel = 'Formulário de comentário';
+
+    const commentInput = document.createElement('input');
+    commentInput.type = 'text';
+    commentInput.placeholder = 'Adicione um comentário...';
+    commentInput.setAttribute('aria-label', `Adicionar comentário para ${game.name}`);
+    commentInput.required = true;
+
+    const commentSubmit = document.createElement('button');
+    commentSubmit.type = 'submit';
+    commentSubmit.textContent = 'Enviar';
+
+    commentForm.appendChild(commentInput);
+    commentForm.appendChild(commentSubmit);
+
+    commentForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = commentInput.value.trim();
+      if(text) {
+        const newComment = document.createElement('li');
+        newComment.textContent = text;
+        commentsList.appendChild(newComment);
+        commentInput.value = '';
+        game.comments.push(text);
+        commentsList.scrollTop = commentsList.scrollHeight;
+      }
+    });
+
+    commentsContent.appendChild(commentsList);
+    commentsContent.appendChild(commentForm);
+
+    // Prices tab content
+    const pricesContent = document.createElement('section');
+    pricesContent.id = `tabpanel${game.id}-1`;
+    pricesContent.className = 'tab-content';
+    pricesContent.setAttribute('role', 'tabpanel');
+    pricesContent.setAttribute('aria-labelledby', `tab${game.id}-1`);
+
+    const priceTable = document.createElement('table');
+    priceTable.className = 'price-table';
+    priceTable.setAttribute('summary', `Tabela de preços dos últimos 6 meses para ${game.name}`);
+
+    const thead = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    const thMonth = document.createElement('th');
+    thMonth.scope = "col";
+    thMonth.textContent = "Mês";
+    const thPrice = document.createElement('th');
+    thPrice.scope = "col";
+    thPrice.textContent = "Preço (R$)";
+    headRow.appendChild(thMonth);
+    headRow.appendChild(thPrice);
+    thead.appendChild(headRow);
+    priceTable.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    game.prices.forEach(record => {
+      const tr = document.createElement('tr');
+      const tdMonth = document.createElement('td');
+      tdMonth.textContent = record.month;
+      const tdPrice = document.createElement('td');
+      tdPrice.textContent = record.price.toFixed(2);
+      tr.appendChild(tdMonth);
+      tr.appendChild(tdPrice);
+      tbody.appendChild(tr);
+    });
+    priceTable.appendChild(tbody);
+    pricesContent.appendChild(priceTable);
+
+    // Rating tab content
+    const ratingContent = document.createElement('section');
+    ratingContent.id = `tabpanel${game.id}-2`;
+    ratingContent.className = 'tab-content';
+    ratingContent.setAttribute('role', 'tabpanel');
+    ratingContent.setAttribute('aria-labelledby', `tab${game.id}-2`);
+
+    const starRating = document.createElement('div');
+    starRating.className = 'star-rating';
+    starRating.setAttribute('role', 'radiogroup');
+    starRating.setAttribute('aria-label', `Avaliação do jogo ${game.name}`);
+
+    function renderStars(rating) {
+      starRating.innerHTML = '';
+      for(let i=1; i<=5; i++) {
+        const starSpan = document.createElement('span');
+        starSpan.className = 'star';
+        starSpan.textContent = '★';
+        starSpan.setAttribute('role', 'radio');
+        starSpan.setAttribute('aria-checked', i === rating ? 'true' : 'false');
+        starSpan.setAttribute('tabindex', i === 1 ? '0' : '-1');
+        if(i <= rating) {
+          starSpan.classList.add('filled', 'selected');
+        }
+        starSpan.dataset.starValue = i;
+
+        starSpan.addEventListener('click', () => {
+          game.rating = i;
+          renderStars(i);
+          // Also update rating summary next to title
+          const newSummary = createRatingSummary(i);
+          titleRow.replaceChild(newSummary, ratingSummary);
+          ratingSummary = newSummary; // update reference
+        });
+
+        starSpan.addEventListener('keydown', (e) => {
+          if(e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            let next = i < 5 ? i + 1 : 1;
+            starRating.querySelector(`[data-star-value="${next}"]`).focus();
+          }
+          if(e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            let prev = i > 1 ? i - 1 : 5;
+            starRating.querySelector(`[data-star-value="${prev}"]`).focus();
+          }
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            game.rating = i;
+            renderStars(i);
+            const newSummary = createRatingSummary(i);
+            titleRow.replaceChild(newSummary, ratingSummary);
+            ratingSummary = newSummary;
+          }
+        });
+
+        starRating.appendChild(starSpan);
+      }
+    }
+    renderStars(game.rating);
+
+    ratingContent.appendChild(starRating);
+
+    // Append tabs buttons and contents to card
+    tabs.append(...tabButtons);
+
+    card.appendChild(titleRow);
+    card.appendChild(style);
+    card.appendChild(tabs);
+    card.appendChild(commentsContent);
+    card.appendChild(pricesContent);
+    card.appendChild(ratingContent);
+
+    // Add tab switching logic
+    tabButtons.forEach((button, idx) => {
+      button.addEventListener('click', () => {
+        // Update aria-selected and active class for buttons
+        tabButtons.forEach((btn, bidx) => {
+          const selected = bidx === idx;
+          btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+          if(selected) btn.classList.add('active'); else btn.classList.remove('active');
+        });
+
+        // Show/hide tab contents
+        [commentsContent, pricesContent, ratingContent].forEach((content, cidx) => {
+          if(cidx === idx) {
+            content.classList.add('active');
+            content.removeAttribute('hidden');
+          } else {
+            content.classList.remove('active');
+            content.setAttribute('hidden', '');
+          }
+        });
+      });
+    });
+
+    grid.appendChild(card);
+  }
+
+  let currentCategory = categories[0].id;
+  const searchInput = document.getElementById('searchInput');
+
+  renderCategories(currentCategory);
+  renderGamesFiltered();
+
+  searchInput.addEventListener('input', () => {
+    renderGamesFiltered();
+  });
+</script>
+</body>
+</html>
+
