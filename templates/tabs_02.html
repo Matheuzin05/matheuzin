@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuuvem - Estilos de Jogo</title>
+    <style>
+        /* styles.css */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #0056b3;
+        }
+
+        .tab-content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+        }
+
+        .star {
+            font-size: 20px;
+            color: gold;
+            cursor: pointer;
+        }
+
+        .star.inactive {
+            color: lightgray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Estilos de Jogo</h1>
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab(event, 'sensacao')">Sensação</button>
+            <button class="tab-button" onclick="openTab(event, 'acesso-antecipado')">Acesso Antecipado</button>
+            <button class="tab-button" onclick="openTab(event, 'fps-online')">FPS Online</button>
+            <button class="tab-button" onclick="openTab(event, 'indie')">Indie</button>
+            <button class="tab-button" onclick="openTab(event, 'pre-venda')">Pré-venda</button>
+            <button class="tab-button" onclick="openTab(event, 'aventura')">Aventura</button>
+        </div>
+
+        <div id="sensacao" class="tab-content">
+            <h2>Sensação</h2>
+            <p>Jogo: <strong>Granblue Fantasy</strong></p>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your_trailer_link" frameborder="0" allowfullscreen></iframe>
+            <p><strong>Sinopse:</strong> Um RPG de ação que combina elementos de fantasia e combate dinâmico.</p>
+            <div class="rating">
+                <span class="star" onclick="rateGame(this, 'sensacao', 1)">★</span>
+                <span class="star" onclick="rateGame(this, 'sensacao', 2)">★</span>
+                <span class="star" onclick="rateGame(this, 'sensacao', 3)">★</span>
+                <span class="star" onclick="rateGame(this, 'sensacao', 4)">★</span>
+                <span class="star" onclick="rateGame(this, 'sensacao', 5)">★</span>
+            </div>
+            <p>Avaliação: <span id="sensacao-rating">0</span> / 5</p>
+        </div>
+
+        <div id="acesso-antecipado" class="tab-content" style="display:none;">
+            <h2>Acesso Antecipado</h2>
+            <p>Jogo: <strong>Copycat</strong></p>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your_trailer_link" frameborder="0" allowfullscreen></iframe>
+            <p><strong>Sinopse:</strong> Um jogo de plataforma onde você deve copiar os movimentos dos inimigos para avançar.</p>
+            <div class="rating">
+                <span class="star" onclick="rateGame(this, 'acesso-antecipado', 1)">★</span>
+                <span class="star" onclick="rateGame(this, 'acesso-antecipado', 2)">★</span>
+                <span class="star" onclick="rateGame(this, 'acesso-antecipado', 3)">★</span>
+                <span class="star" onclick="rateGame(this, 'acesso-antecipado', 4)">★</span>
+                <span class="star" onclick="rateGame(this, 'acesso-antecipado', 5)">★</span>
+            </div>
+            <p>Avaliação: <span id="acesso-antecipado-rating">0</span> / 5</p>
+        </div>
+
+        <div id="fps-online" class="tab-content" style="display:none;">
+            <h2>FPS Online</h2>
+            <p>Jogo: <strong>Valorant</strong></p>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your_trailer_link" frameborder="0" allowfullscreen></iframe>
+            <p><strong>Sinopse:</strong> Um jogo de tiro tático em equipe com personagens únicos e habilidades especiais.</p>
+            <div class="rating">
+                <span class="star" onclick="rateGame(this, 'fps-online', 1)">★</span>
+                <span class="star" onclick="rateGame(this, 'fps-online', 2)">★</span>
+                <span class="star" onclick="rateGame(this, 'fps-online', 3)">★</span>
+                <span class="star" onclick="rateGame(this, 'fps-online', 4)">★</span>
+                <span class="star" onclick="rateGame(this, 'fps-online', 5)">★</span>
+            </div>
+            <p>Avaliação: <span id="fps-online-rating">0</span> / 5</p>
+        </div>
+
+        <div id="indie" class="tab-content" style="display:none;">
+            <h2>Indie</h2>
+            <p>Jogo: <strong>Libritopia</strong></p>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your_trailer_link" frameborder="0" allowfullscreen></iframe>
+            <p><strong>Sinopse:</strong> Um jogo de aventura que explora a imaginação e a criatividade.</p>
+            <div class="rating">
+                <span class="star" onclick="rateGame(this, 'indie', 1)">★</span>
+                <span class="star" onclick="rateGame(this, 'indie', 2)">★</span>
+                <span class="star" onclick="rateGame(this, 'indie', 3)">★</span>
+                <span class="star" onclick="rateGame(this, 'indie', 4)">★</span>
+                <span class="star" onclick="rateGame(this, 'indie', 5)">★</span>
+            </div>
+            <p>Avaliação: <span id="indie-rating">0</span> / 5</p>
+        </div>
+
+        <div id="pre-venda" class="tab-content" style="display:none;">
+            <h2>Pré-venda</h2>
+            <p>Jogo: <strong>wYzards</strong></p>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your_trailer_link" frameborder="0" allowfullscreen></iframe>
+            <p><strong>Sinopse:</strong> Um jogo de estratégia onde você controla magos em batalhas épicas.</p>
+            <div class="rating">
+                <span class="star" onclick="rateGame(this, 'pre-venda', 1)">★</span>
+                <span class="star" onclick="rateGame(this, 'pre-venda', 2)">★</span>
+                <span class="star" onclick="rateGame(this, 'pre-venda', 3)">★</span>
+                <span class="star" onclick="rateGame(this, 'pre-venda', 4)">★</span>
+                <span class="star" onclick="rateGame(this, 'pre-venda', 5)">★</span>
+            </div>
+            <p>Avaliação: <span id="pre-venda-rating">0</span> / 5</p>
+        </div>
+
+        <div id="aventura" class="tab-content" style="display:none;">
+            <h2>Aventura</h2>
+            <p>Jogo: <strong>Bagdex</strong></p>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your_trailer_link" frameborder="0" allowfullscreen></iframe>
+            <p><strong>Sinopse:</strong> Um jogo de aventura que leva você a mundos fantásticos e desafiadores.</p>
+            <div class="rating">
+                <span class="star" onclick="rateGame(this, 'aventura', 1)">★</span>
+                <span class="star" onclick="rateGame(this, 'aventura', 2)">★</span>
+                <span class="star" onclick="rateGame(this, 'aventura', 3)">★</span>
+                <span class="star" onclick="rateGame(this, 'aventura', 4)">★</span>
+                <span class="star" onclick="rateGame(this, 'aventura', 5)">★</span>
+            </div>
+            <p>Avaliação: <span id="aventura-rating">0</span> / 5</p>
+        </div>
+    </div>
+
+    <script>
+        // script.js
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabbuttons;
+
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";  
+            }
+
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+            }
+
+            document.getElementById(tabName).style.display = "block";  
+            evt.currentTarget.className += " active";
+        }
+
+        function rateGame(star, tabName, rating) {
+            var stars = document.querySelectorAll(`#${tabName} .star`);
+            stars.forEach((s, index) => {
+                s.classList.toggle('inactive', index >= rating);
+            });
+            document.getElementById(`${tabName}-rating`).innerText = rating;
+        }
+    </script>
+</body>
+</html>
