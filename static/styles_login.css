@@ -21,49 +21,7 @@
     max-width: 90vw;
     overflow: hidden;
   }
-  /* Tab radios hidden */
-  input[type="radio"] {
-    display: none;
-  }
-  /* Tabs styles */
-  .tab-labels {
-    display: flex;
-    background: #1d4ed8;
-  }
-  .tab-labels label {
-    flex: 1;
-    padding: 15px 0;
-    color: #bbb;
-    text-align: center;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    user-select: none;
-  }
-  /* Active tab label styling */
-  #tab-login:checked ~ .tab-labels label[for="tab-login"],
-  #tab-cadastro:checked ~ .tab-labels label[for="tab-cadastro"] {
-    background: #1d4ed8;
-    color: #fff;
-  }
-  /* Content sections */
-  .tab-content {
-    padding: 30px 28px 40px;
-    background: #f9f9fb;
-  }
-  /* Hide all content by default */
-  .content-login,
-  .content-cadastro {
-    display: none;
-    animation: fadeIn 0.3s ease forwards;
-  }
-  /* Show content of selected tab */
-  #tab-login:checked ~ .tab-content .content-login {
-    display: block;
-  }
-  #tab-cadastro:checked ~ .tab-content .content-cadastro {
-    display: block;
-  }
+
   /* Form styles */
   form {
     display: flex;

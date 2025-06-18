@@ -14,8 +14,11 @@ def login():
 def servicos():
     return render_template('servicos.html')
 
-@app.route('/cadastro')
+@app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
+    if request.method == 'POST':
+        # Lógica para processar o cadastro
+        pass
     return render_template('cadastro.html')
 
 if __name__ == '__main__':
