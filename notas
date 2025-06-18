@@ -1,1 +1,12 @@
 dia 18/06: dando inicio a criptografia dos dados do usuario
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    
+    if username == '' and password == '123':
+        return redirect('/servicos')
+    else:
+        print('Usuário não encontrado')
+        return "Usuário ou senha incorretos", 401 #
