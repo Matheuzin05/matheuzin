@@ -10,9 +10,13 @@ def index():
 def login():
     return render_template('login.html')
 
-@app.route('/servicos')
-def servicos():
-    return render_template('servicos.html')
+@app.route('/nuuv')
+def nuuv():
+    return render_template('nuuv.html')
+
+@app.route('/servico')
+def servico():
+    return render_template('servico.html')
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():

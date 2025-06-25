@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cadastro</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles_login.css') }}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for ('static', filename='styles_cadastro.css')}}" />
+
+    <title>Cadastro</title>
+   
 </head>
 <body>
-  <div class="container">
-    <h2>Cadastro</h2>
-    <form action="{{ url_for('cadastro') }}" method="POST">
-      <label for="cadastro-username">Nome de usuário</label>
-      <input type="text" id="cadastro-username" name="cadastro-username" required autocomplete="username" />
-      
-      <label for="cadastro-email">Email</label>
-      <input type="email" id="cadastro-email" name="cadastro-email" required autocomplete="email" />
-      
-      <label for="cadastro-password">Senha</label>
-      <input type="password" id="cadastro-password" name="cadastro-password" required autocomplete="new-password" />
-      
-      <button type="submit">Cadastrar</button>
-    </form>
-    <p>Já tem conta? <a href="{{ url_for('login_page') }}">Faça login aqui</a></p>
-  </div>
+    <div class="container">
+        <h1>Crie sua conta</h1>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Nome de usuário</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirme sua senha</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+
+            <button type="submit">Cadastrar</button>
+
+            <div class="links">
+                <p>Já tem uma conta? <a href=/login>Faça login</a></p>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

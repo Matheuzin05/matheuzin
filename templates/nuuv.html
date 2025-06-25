@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for ('static', filename='styles_nuuv.css')}}" />
+
+  <title>Wiki de Jogos</title>
+
+</head>
+<body>
+  <header>
+    <div class="logo" aria-label="Logo Wiki de Jogos">WikiJogos</div>
+    
+    <div id="loginSection" class="login-container" aria-label="Login">
+
+      <input type="text" id="username" placeholder="Usuário" autocomplete="username" aria-label="Usuário" />
+      <input type="password" id="password" placeholder="Senha" autocomplete="current-password" aria-label="Senha" />
+
+      <a href="/login">    <button id="loginBtn">Login</button>
+
+
+    </div>
+    <div id="welcomeMessage" class="welcome-msg" style="display:none;" aria-live="polite"></div>
+  </header>
+
+  <nav class="search-bar" aria-label="Barra de pesquisa">
+    <input type="search" id="searchInput" placeholder="Pesquisar jogos..." aria-label="Pesquisar jogos" />
+  </nav>
+
+  <nav class="genre-tabs" role="tablist" aria-label="Estilos de jogos" id="genreTabs">
+    <!-- Tabs inserted dynamically -->
+  </nav>
+
+  <main class="content">
+    <div class="top-section">
+      <section class="details" aria-live="polite" aria-label="Detalhes do jogo selecionado">
+        <h2 id="gameTitle">Selecione um jogo</h2>
+
+        <div class="trailer-container" id="trailerContainer" aria-label="Trailer do jogo" style="display:none;">
+          <iframe id="trailerFrame" 
+             src="" 
+             title="Trailer do jogo"
+             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+             allowfullscreen>
+          </iframe>
+        </div>
+
+        <canvas id="priceChart" aria-label="Gráfico histórico de preços do jogo" role="img"></canvas>
+      </section>
+
+      <div class="right-panel" aria-label="Lista de jogos e título">
+        <h2 class="games-header">Jogos</h2>
+
+        <section class="games-list" aria-label="Lista de jogos" tabindex="0" id="gamesList">
+          <ul class="games" id="gamesUl">
+            <!-- games inserted dynamically -->
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <section class="comments-section" id="commentsSection" aria-label="Comentários do jogo">
+    <h3>Comentários</h3>
+    <div id="commentsContent">
+      Nenhum jogo selecionado.
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (() => {
+      const genres = [
+        {
+          id: 'action',
+          name: 'Ação',
+          games: [
+            {
+              id: 'doom',
+              name: 'Doom Eternal',
+              comments: [
+                'Melhor jogo de FPS recente, gráficos incríveis!',
+                'A jogabilidade é desafiadora, gostei muito.',
+                'Muitos inimigos e armas variadas, diversão garantida.'
+              ],
+              prices: [
+                { date: '2023-01', price: 59.99 },
+                { date: '2023-03', price: 49.99 },
+                { date: '2023-06', price: 39.99 },
+                { date: '2023-09', price: 29.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/Fk0HzsLiteo'
+            },
+            {
+              id: 'cyberpunk',
+              name: 'Cyberpunk 2077',
+              comments: [
+                'Depois das atualizações, o jogo está muito bom!',
+                'Gráficos espetaculares, história interessante.',
+                'Problemas técnicos ficaram para trás, recomendo.'
+              ],
+              prices: [
+                { date: '2022-11', price: 69.99 },
+                { date: '2023-02', price: 59.99 },
+                { date: '2023-05', price: 39.99 },
+                { date: '2023-08', price: 29.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/qIcTM8WXFjk'
+            }
+          ]
+        },
+        {
+          id: 'rpg',
+          name: 'RPG',
+          games: [
+            {
+              id: 'witcher3',
+              name: 'The Witcher 3: Wild Hunt',
+              comments: [
+                'História imersiva, mundo aberto enorme.',
+                'Personagens muito bem desenvolvidos, não cansa de jogar.',
+                'Algumas missões são épicas e memoráveis.'
+              ],
+              prices: [
+                { date: '2022-12', price: 49.99 },
+                { date: '2023-04', price: 39.99 },
+                { date: '2023-07', price: 29.99 },
+                { date: '2023-10', price: 19.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/c0i88t0Kacs'
+            },
+            {
+              id: 'skyrim',
+              name: 'Skyrim',
+              comments: [
+                'Clássico indiscutível, modding incrível.',
+                'Exploração livre e muita customização.',
+                'Apesar dos anos, ainda divertido.'
+              ],
+              prices: [
+                { date: '2023-01', price: 39.99 },
+                { date: '2023-03', price: 29.99 },
+                { date: '2023-06', price: 19.99 },
+                { date: '2023-09', price: 9.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/JSRtYpNRoN0'
+            }
+          ]
+        },
+        {
+          id: 'strategy',
+          name: 'Estratégia',
+          games: [
+            {
+              id: 'civilization6',
+              name: 'Civilization VI',
+              comments: [
+                'Excelente para quem gosta de estratégia por turnos.',
+                'Muitas civilizações e opções de vitória.',
+                'Pode ser viciante por horas.'
+              ],
+              prices: [
+                { date: '2022-11', price: 59.99 },
+                { date: '2023-02', price: 49.99 },
+                { date: '2023-05', price: 39.99 },
+                { date: '2023-08', price: 29.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/t2-btVL6Jyg'
+            },
+            {
+              id: 'starcraft2',
+              name: 'StarCraft II',
+              comments: [
+                'Um clássico RTS com multiplayer frenético.',
+                'Campanha muito bem feita e equilibrada.',
+                'Gráficos ainda relevantes e gameplay rápido.'
+              ],
+              prices: [
+                { date: '2022-12', price: 39.99 },
+                { date: '2023-04', price: 29.99 },
+                { date: '2023-07', price: 19.99 },
+                { date: '2023-10', price: 14.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/2wpd7bY6EcM'
+            }
+          ]
+        },
+        {
+          id: 'sports',
+          name: 'Esportes',
+          games: [
+            {
+              id: 'fifa',
+              name: 'FIFA 23',
+              comments: [
+                'Realismo impressionante nos gráficos e movimentação.',
+                'Modos de jogo variados e entretenimento garantido.',
+                'Atualizações frequentes com novas equipes.'
+              ],
+              prices: [
+                { date: '2022-10', price: 59.99 },
+                { date: '2023-01', price: 49.99 },
+                { date: '2023-04', price: 39.99 },
+                { date: '2023-07', price: 29.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/0Uxb5WqThhI'
+            },
+            {
+              id: 'nba2k',
+              name: 'NBA 2K23',
+              comments: [
+                'Melhor jogo de basquete disponível.',
+                'Física das jogadas realista e customização de jogadores.',
+                'Jogabilidade fluida e modos online.'
+              ],
+              prices: [
+                { date: '2022-11', price: 59.99 },
+                { date: '2023-03', price: 49.99 },
+                { date: '2023-06', price: 39.99 },
+                { date: '2023-09', price: 29.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/OJ9SxkfY3pA'
+            }
+          ]
+        },
+        {
+          id: 'fps',
+          name: 'FPS',
+          games: [
+            {
+              id: 'callofduty',
+              name: 'Call of Duty: Modern Warfare',
+              comments: [
+                'Campanha intensa e multiplayer competitivo.',
+                'Gráficos realistas e jogabilidade fluida.',
+                'Diversidade de armas e mapas.'
+              ],
+              prices: [
+                { date: '2022-09', price: 59.99 },
+                { date: '2023-01', price: 49.99 },
+                { date: '2023-05', price: 39.99 },
+                { date: '2023-08', price: 29.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/bzD-NbFHp3w'
+            },
+            {
+              id: 'overwatch',
+              name: 'Overwatch',
+              comments: [
+                'Jogo de tiro em equipe com heróis únicos.',
+                'Multiplayer divertido e dinâmico.',
+                'Constantes updates e eventos.'
+              ],
+              prices: [
+                { date: '2022-10', price: 39.99 },
+                { date: '2023-02', price: 34.99 },
+                { date: '2023-06', price: 29.99 },
+                { date: '2023-09', price: 19.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/FqnKB22pOC0'
+            }
+          ]
+        },
+        {
+          id: 'indie',
+          name: 'Indie',
+          games: [
+            {
+              id: 'hollowknight',
+              name: 'Hollow Knight',
+              comments: [
+                'Atmosfera única e visuais lindos.',
+                'Jogabilidade desafiadora e exploração profunda.',
+                'Contato emocional com a história.'
+              ],
+              prices: [
+                { date: '2022-11', price: 14.99 },
+                { date: '2023-03', price: 12.99 },
+                { date: '2023-07', price: 9.99 },
+                { date: '2023-10', price: 7.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/UAO2urG23S4'
+            },
+            {
+              id: 'celeste',
+              name: 'Celeste',
+              comments: [
+                'Plataforma difícil e emocionante.',
+                'Trilha sonora incrível e história sensível.',
+                'Excelente para amantes de desafios.'
+              ],
+              prices: [
+                { date: '2022-12', price: 19.99 },
+                { date: '2023-04', price: 15.99 },
+                { date: '2023-08', price: 12.99 },
+                { date: '2023-11', price: 9.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/uHjl7mVm6KY'
+            }
+          ]
+        },
+        {
+          id: 'adventure',
+          name: 'Aventura',
+          games: [
+            {
+              id: 'tombraider',
+              name: 'Tomb Raider',
+              comments: [
+                'Exploração e ação combinadas numa ótima história.',
+                'Gráficos modernos e ambiente imersivo.',
+                'Personagem icônica Lara Croft.'
+              ],
+              prices: [
+                { date: '2022-10', price: 39.99 },
+                { date: '2023-01', price: 29.99 },
+                { date: '2023-06', price: 19.99 },
+                { date: '2023-09', price: 14.99 }
+              ],
+              trailer: 'https://www.youtube.com/embed/8xg0vWJM_Nk'
+            },
+            {
+              id: 'minecraft',
+              name: 'Minecraft',
+              comments: [
+                'Jogo sandbox para construção e aventura.',
+                'Infinita criação e exploração.',
+                'Imensa comunidade e mods.'
+              ],
+              prices: [
+                { date: '2022-11', price: 26.95 },
+                { date: '2023-03', price: 26.95 },
+                { date: '2023-07', price: 26.95 },
+                { date: '2023-10', price: 26.95 }
+              ],
+              trailer: 'https://www.youtube.com/embed/MmB9b5njVbA'
+            }
+          ]
+        }
+      ];
+
+      let currentGenreId = genres[0].id;
+      let currentGameId = null;
+
+      // Login functionality (fake)
+      const loginSection = document.getElementById('loginSection');
+      const welcomeMessage = document.getElementById('welcomeMessage');
+      const loginBtn = document.getElementById('loginBtn');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+
+      loginBtn.addEventListener('click', () => {
+        const user = usernameInput.value.trim();
+        const pass = passwordInput.value.trim();
+        if (user && pass) {
+          loginSection.style.display = 'none';
+          welcomeMessage.style.display = 'block';
+          welcomeMessage.textContent = `Bem-vindo, ${user}!`;
+        } else {
+          alert('Por favor, preencha usuário e senha.');
+        }
+      });
+
+      // Tabs rendering
+      const genreTabs = document.getElementById('genreTabs');
+      function renderTabs() {
+        genreTabs.innerHTML = '';
+        genres.forEach((g) => {
+          const tab = document.createElement('button');
+          tab.className = 'tab';
+          tab.setAttribute('role', 'tab');
+          tab.setAttribute('aria-selected', 'false');
+          tab.setAttribute('aria-controls', `panel-${g.id}`);
+          tab.id = `tab-${g.id}`;
+          tab.textContent = g.name;
+          tab.type = 'button';
+          if (g.id === currentGenreId) {
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+          }
+          tab.addEventListener('click', () => {
+            if (currentGenreId !== g.id) {
+              currentGenreId = g.id;
+              currentGameId = null;
+              updateTabs();
+              renderGamesList();
+              clearGameDetails();
+            }
+          });
+          genreTabs.appendChild(tab);
+        });
+      }
+      function updateTabs() {
+        const tabs = genreTabs.querySelectorAll('button');
+        tabs.forEach((t) => {
+          const selected = t.id === 'tab-' + currentGenreId;
+          t.classList.toggle('active', selected);
+          t.setAttribute('aria-selected', selected ? 'true' : 'false');
+        });
+      }
+
+      // Games list rendering
+      const gamesUl = document.getElementById('gamesUl');
+      function renderGamesList(filter = '') {
+        gamesUl.innerHTML = '';
+        const genre = genres.find(g => g.id === currentGenreId);
+        if (!genre) return;
+        let filteredGames = genre.games;
+        if (filter.trim().length > 0) {
+          const lcFilter = filter.toLowerCase();
+          filteredGames = filteredGames.filter(g => g.name.toLowerCase().includes(lcFilter));
+        }
+        if (filteredGames.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'Nenhum jogo encontrado.';
+          li.style.fontStyle = 'italic';
+          li.style.cursor = 'default';
+          gamesUl.appendChild(li);
+          return;
+        }
+        filteredGames.forEach(game => {
+          const li = document.createElement('li');
+          li.textContent = game.name;
+          li.setAttribute('tabindex', '0');
+          li.classList.toggle('selected', game.id === currentGameId);
+          li.addEventListener('click', () => {
+            currentGameId = game.id;
+            renderGamesList(document.getElementById('searchInput').value);
+            renderGameDetails();
+          });
+          li.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              li.click();
+            }
+          });
+          gamesUl.appendChild(li);
+        });
+      }
+
+      // Game details rendering
+      const gameTitle = document.getElementById('gameTitle');
+      const commentsSection = document.getElementById('commentsSection');
+      const commentsContent = document.getElementById('commentsContent');
+      const trailerContainer = document.getElementById('trailerContainer');
+      const trailerFrame = document.getElementById('trailerFrame');
+      const priceChartCtx = document.getElementById('priceChart').getContext('2d');
+      let priceChart = null;
+
+      function clearGameDetails() {
+        gameTitle.textContent = 'Selecione um jogo';
+        commentsContent.textContent = 'Nenhum jogo selecionado.';
+        trailerContainer.style.display = 'none';
+        trailerFrame.src = '';
+        if (priceChart) {
+          priceChart.destroy();
+          priceChart = null;
+        }
+      }
+
+      function renderGameDetails() {
+        if (!currentGameId) {
+          clearGameDetails();
+          return;
+        }
+        const genre = genres.find(g => g.id === currentGenreId);
+        if (!genre) return;
+        const game = genre.games.find(g => g.id === currentGameId);
+        if (!game) return;
+
+        gameTitle.textContent = game.name;
+
+        // Render comments in dedicated comments section
+        commentsContent.innerHTML = '';
+        game.comments.forEach(cmt => {
+          const p = document.createElement('p');
+          p.textContent = cmt;
+          commentsContent.appendChild(p);
+        });
+
+        // Show trailer if available
+        if (game.trailer) {
+          trailerFrame.src = game.trailer + '?rel=0';
+          trailerContainer.style.display = 'block';
+        } else {
+          trailerContainer.style.display = 'none';
+          trailerFrame.src = '';
+        }
+
+        // Render price history chart
+        const labels = game.prices.map(p => p.date);
+        const data = game.prices.map(p => p.price);
+
+        if (priceChart) {
+          priceChart.destroy();
+        }
+        priceChart = new Chart(priceChartCtx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Preço (USD)',
+              data: data,
+              borderColor: '#28a745',
+              backgroundColor: 'rgba(40, 167, 69, 0.3)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 5,
+              pointBackgroundColor: '#28a745',
+              pointHoverRadius: 7,
+              borderWidth: 3
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: false,
+                ticks: {
+                  callback: (value) => '$' + value.toFixed(2),
+                  color: '#28a745',
+                  font: { weight: '600' }
+                },
+                grid: {
+                  color: 'rgba(40, 167, 69, 0.1)',
+                  borderColor: 'rgba(40, 167, 69, 0.25)'
+                }
+              },
+              x: {
+                grid: {
+                  color: 'rgba(40, 167, 69, 0.1)',
+                  borderColor: 'rgba(40, 167, 69, 0.25)'
+                },
+                ticks: {
+                  color: '#28a745',
+                  font: { weight: '600' }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  color: '#28a745',
+                  font: { weight: 'bold' }
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: context => `$${context.parsed.y.toFixed(2)}`
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Search functionality
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', () => {
+        renderGamesList(searchInput.value);
+        currentGameId = null;
+        clearGameDetails();
+      });
+
+      // Initialize page
+      renderTabs();
+      renderGamesList();
+      clearGameDetails();
+    })();
+  </script>
+</body>
+</html>
